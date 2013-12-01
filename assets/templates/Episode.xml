@@ -27,9 +27,13 @@
                 <image>{{IMAGEURL(thumb::384)}}</image>
                 <!--<defaultImage>resource://16X9.png</defaultImage>      This causes the thumbnail to be too small, not sure why.-->
                 <accessories>
-                  <unplayedDot/>{{CUT(viewOffset)}}
+                  <unplayedDot/>{{CUT(viewCount)}}
+                  <progressBar percentage="100"/>{{CUT(viewCount:CUT:=}}
+                </accessories>{{CUT(viewOffset)}}
+                <accessories>
                   <partiallyPlayedDot/>
-                </accessories>{{CUT(viewCount)}}
+                  <progressBar percentage="{{getPercentComplete(viewOffset:0:duration:1)}}"/>
+                </accessories>{{CUT(viewOffset:CUT:=)}}
                 <preview>
                   <keyedPreview>
                     <title>{{VAL(title)}}</title>
