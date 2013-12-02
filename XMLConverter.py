@@ -794,6 +794,20 @@ class CCommandCollection(CCommandHelper):
         else:
             return False  # tree unchanged
     
+    def TREE_MIN_OS(self, elem, child, src, srcXML, param):
+        minVersion, leftover = self.getParam(src, param);
+        platformVersion = self.options['PlatformVersion']
+        
+        # create tuples for comparison
+        minTuple = tuple(map(int, (minVersion.split("."))))
+        platformTuple = tuple(map(int, (platformVersion.split("."))))
+        
+        if platformTuple < minTuple:
+            elem.remove(child)
+            return True  # tree modified, node removed: restart from 1st elem
+        else:
+            return False  # tree unchanged
+    
     def TREE_ADDXML(self, elem, child, src, srcXML, param):
         tag, leftover = self.getParam(src, param)
         key, leftover, dfltd = self.getKey(src, srcXML, leftover)
