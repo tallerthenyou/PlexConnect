@@ -1089,7 +1089,6 @@ class CCommandCollection(CCommandHelper):
         viewOffset, leftover, dfltd = self.getKey(src, srcXML, param)
         duration, leftover, dfltd = self.getKey(src, srcXML, leftover)
         return self._("{0:d}").format((int(viewOffset) * 100) / int(duration))
-        #return self._("{0:d}").format((int(viewOffset) / int(duration)) * 100)
     
     def ATTRIB_contentRating(self, src, srcXML, param):
         rating, leftover, dfltd = self.getKey(src, srcXML, param)
