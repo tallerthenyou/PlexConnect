@@ -28,7 +28,7 @@
                 <!--<defaultImage>resource://16X9.png</defaultImage>      This causes the thumbnail to be too small, not sure why.-->
                 <accessories>
                   <unplayedDot/>{{CUT(viewCount)}}
-                  <progressBar percentage="100"/>{{CUT(viewCount:CUT:=}}
+                  <progressBar percentage="100"/>{{CUT(viewCount:CUT:=)}}
                 </accessories>{{CUT(viewOffset)}}
                 <accessories>
                   <partiallyPlayedDot/>
