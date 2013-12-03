@@ -56,6 +56,9 @@ def setATVSettings(cfg):
 g_CommandCollection = None
 
 
+def version(versionString):
+    return tuple(map(int, (versionString.split("."))))
+
 
 """
 # aTV XML ErrorMessage - hardcoded XML File
@@ -603,7 +606,7 @@ class CCommandHelper():
         self.path = {'main': path}
         
         self.ATV_udid = self.options['PlexConnectUDID']
-        self.variables = {}
+        self.variables = {"True": True, "False": False}
     
     # internal helper functions
     def getParam(self, src, param):
@@ -660,6 +663,9 @@ class CCommandHelper():
             UDID = self.options['PlexConnectUDID']
             PMS_uuid = PlexAPI.getPMSFromAddress(UDID, self.PMS_baseURL)
             res = PlexAPI.getPMSProperty(UDID, PMS_uuid, attrib[1:])
+            dfltd = False
+        elif attrib.startswith('^'):  # aTV property
+            res = self.options[attrib[1:]]
             dfltd = False
         elif el!=None and attrib in el.attrib:
             res = el.get(attrib)
@@ -799,20 +805,6 @@ class CCommandCollection(CCommandHelper):
         if not dfltd:
             key = self.applyConversion(key, conv)
         if key:
-            elem.remove(child)
-            return True  # tree modified, node removed: restart from 1st elem
-        else:
-            return False  # tree unchanged
-    
-    def TREE_MIN_OS(self, elem, child, src, srcXML, param):
-        minVersion, leftover = self.getParam(src, param);
-        platformVersion = self.options['PlatformVersion']
-        
-        # create tuples for comparison
-        minTuple = tuple(map(int, (minVersion.split("."))))
-        platformTuple = tuple(map(int, (platformVersion.split("."))))
-        
-        if platformTuple < minTuple:
             elem.remove(child)
             return True  # tree modified, node removed: restart from 1st elem
         else:
@@ -1114,11 +1106,6 @@ class CCommandCollection(CCommandHelper):
                 if hour == 0: return self._("{0:d} Minutes").format(min)
                 else: return self._("{0:d}hr {1:d}min").format(hour, min)
         return ""
-    
-    def ATTRIB_getPercentComplete(self, src, srcXML, param):
-        viewOffset, leftover, dfltd = self.getKey(src, srcXML, param)
-        duration, leftover, dfltd = self.getKey(src, srcXML, leftover)
-        return self._("{0:d}").format((int(viewOffset) * 100) / int(duration))
     
     def ATTRIB_contentRating(self, src, srcXML, param):
         rating, leftover, dfltd = self.getKey(src, srcXML, param)
