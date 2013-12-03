@@ -470,6 +470,10 @@ def XML_ExpandNode(elem, child, src, srcXML, text_tail):
     while line!=None:
         cmd_start = line.find('{{',pos)
         cmd_end   = line.find('}}',pos)
+        next_start = line.find('{{',cmd_start+2)
+        while next_start!=-1 and next_start<cmd_end:
+            cmd_end = line.find('}}',cmd_end+2)
+            next_start = line.find('{{',next_start+2)
         if cmd_start==-1 or cmd_end==-1 or cmd_start>cmd_end:
             return False  # tree not touched, line unchanged
         
@@ -542,6 +546,11 @@ def XML_ExpandLine(src, srcXML, line):
     while True:
         cmd_start = line.find('{{',pos)
         cmd_end   = line.find('}}',pos)
+        next_start = line.find('{{',cmd_start+2)
+        while next_start!=-1 and next_start<cmd_end:
+            cmd_end = line.find('}}',cmd_end+2)
+            next_start = line.find('{{',next_start+2)
+
         if cmd_start==-1 or cmd_end==-1 or cmd_start>cmd_end:
             break;
         
@@ -784,6 +793,7 @@ class CCommandCollection(CCommandHelper):
         return True  # tree modified, nodes updated: restart from 1st elem
     
     def TREE_CUT(self, elem, child, src, srcXML, param):
+        param = XML_ExpandLine(src, srcXML, param)
         key, leftover, dfltd = self.getKey(src, srcXML, param)
         conv, leftover = self.getConversion(src, leftover)
         if not dfltd:
@@ -874,6 +884,12 @@ class CCommandCollection(CCommandHelper):
         if not dfltd:
             key = self.applyMath(key, math, frmt)
         return key
+
+    def ATTRIB_MATH(self, src, srcXML, param):
+        dprint(__name__, 1, 'MATH1: {0}', param)
+        logic = XML_ExpandLine(src, srcXML, param);
+        dprint(__name__, 1, 'MATH2: {0} = {1}', logic, eval(logic))
+        return str(eval(logic))
 
     def ATTRIB_SVAL(self, src, srcXML, param):
         key, leftover, dfltd = self.getKey(src, srcXML, param)
@@ -970,7 +986,7 @@ class CCommandCollection(CCommandHelper):
         if not PMS_baseURL=='':
             PMS_baseURL = '/PMS(' + quote_plus(PMS_baseURL) + ')'
         
-        res = 'http://' + g_param['HostOfPlexConnect']  # base address to PlexConnect
+        res = g_param['baseURL']  # base address to PlexConnect
         
         if key.endswith('.js'):  # link to PlexConnect owned .js stuff
             res = res + key
