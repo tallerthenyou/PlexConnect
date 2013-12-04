@@ -865,14 +865,6 @@ class CCommandCollection(CCommandHelper):
         return key
     
     def ATTRIB_EVAL(self, src, srcXML, param):
-        key, leftover, dfltd = self.getKey(src, srcXML, param)
-        math, leftover = self.getParam(src, leftover)
-        frmt, leftover = self.getParam(src, leftover)
-        if not dfltd:
-            key = self.applyMath(key, math, frmt)
-        return key
-
-    def ATTRIB_MATH(self, src, srcXML, param):
         return str(eval(param))
 
     def ATTRIB_SVAL(self, src, srcXML, param):
