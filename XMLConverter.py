@@ -486,6 +486,7 @@ def XML_ExpandNode(elem, child, src, srcXML, text_tail):
         parts = cmd.split('(',1)
         cmd = parts[0]
         param = parts[1].strip(')')  # remove ending bracket
+        param = XML_ExpandLine(src, srcXML, param)  # expand any attributes in the parameter
         
         res = False
         if hasattr(CCommandCollection, 'TREE_'+cmd):  # expand tree, work COPY, CUT
@@ -563,6 +564,7 @@ def XML_ExpandLine(src, srcXML, line):
         parts = cmd.split('(',1)
         cmd = parts[0]
         param = parts[1][:-1]  # remove ending bracket
+        param = XML_ExpandLine(src, srcXML, param)  # expand any attributes in the parameter
         
         if hasattr(CCommandCollection, 'ATTRIB_'+cmd):  # expand line, work VAL, EVAL...
             
@@ -793,7 +795,6 @@ class CCommandCollection(CCommandHelper):
         return True  # tree modified, nodes updated: restart from 1st elem
     
     def TREE_CUT(self, elem, child, src, srcXML, param):
-        param = XML_ExpandLine(src, srcXML, param)
         key, leftover, dfltd = self.getKey(src, srcXML, param)
         conv, leftover = self.getConversion(src, leftover)
         if not dfltd:
@@ -872,10 +873,7 @@ class CCommandCollection(CCommandHelper):
         return key
 
     def ATTRIB_MATH(self, src, srcXML, param):
-        dprint(__name__, 1, 'MATH1: {0}', param)
-        logic = XML_ExpandLine(src, srcXML, param);
-        dprint(__name__, 1, 'MATH2: {0} = {1}', logic, eval(logic))
-        return str(eval(logic))
+        return str(eval(param))
 
     def ATTRIB_SVAL(self, src, srcXML, param):
         key, leftover, dfltd = self.getKey(src, srcXML, param)
