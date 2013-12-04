@@ -32,7 +32,7 @@
                 </accessories>{{CUT(viewOffset)}}
                 <accessories>
                   <partiallyPlayedDot/>
-                  <progressBar percentage="{{MATH({{VAL(viewOffset:0)}} * 100 / {{VAL(duration:1)}})}}"/>{{CUT(^aTVVersion:CUT:=CUT|6.0=)}}
+                  <progressBar percentage="{{EVAL({{VAL(viewOffset:0)}} * 100 / {{VAL(duration:1)}})}}"/>{{CUT(^aTVVersion:CUT:=CUT|6.0=)}}
                 </accessories>{{CUT(viewOffset:CUT:=)}}
                 <preview>
                   <keyedPreview>
