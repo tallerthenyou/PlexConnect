@@ -28,11 +28,11 @@
                 <!--<defaultImage>resource://16X9.png</defaultImage>      This causes the thumbnail to be too small, not sure why.-->
                 <accessories>
                   <unplayedDot/>{{CUT(viewCount)}}
-                  <progressBar percentage="100"/>{{CUT(viewCount:CUT:=)}}{{CUT(#{{MATH(version("{{VAL(^PlatformVersion)}}") &lt; version("6.0"))}})}}
+                  <progressBar percentage="100"/>{{CUT(viewCount:CUT:=)}}{{CUT(^aTVVersion:CUT:=CUT|6.0=)}}
                 </accessories>{{CUT(viewOffset)}}
                 <accessories>
                   <partiallyPlayedDot/>
-                  <progressBar percentage="{{MATH({{VAL(viewOffset:0)}} * 100 / {{VAL(duration:1)}})}}"/>{{CUT(#{{MATH(version("{{VAL(^PlatformVersion)}}") &lt; version("6.0"))}})}}
+                  <progressBar percentage="{{MATH({{VAL(viewOffset:0)}} * 100 / {{VAL(duration:1)}})}}"/>{{CUT(^aTVVersion:CUT:=CUT|6.0=)}}
                 </accessories>{{CUT(viewOffset:CUT:=)}}
                 <preview>
                   <keyedPreview>

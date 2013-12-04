@@ -115,7 +115,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
             # pass along platform version
             userAgent = self.headers['User-Agent'];
-            options['PlatformVersion'] = userAgent.split('/')[1].split(' ')[0]
+            options['aTVVersion'] = userAgent.split('/')[1].split(' ')[0]
             
             dprint(__name__, 2, "pms address:\n{0}", PMSaddress)
             dprint(__name__, 2, "cleaned path:\n{0}", self.path)
